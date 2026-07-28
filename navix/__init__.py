@@ -1,5 +1,5 @@
 from .client import NavixBot
-from .models import Message
+from .models import Message, User, Chat
 from .extensions_800 import (
     SecurityGuard,
     PerformanceCache,
@@ -7,16 +7,21 @@ from .extensions_800 import (
     async_retry,
     DataFormatter
 )
+from .middleware import MiddlewareManager, BaseMiddleware
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 __author__ = "TheDevErfan"
 
 __all__ = [
     "NavixBot",
     "Message",
+    "User",
+    "Chat",
     "SecurityGuard",
     "PerformanceCache",
     "AdvancedRateLimiter",
     "async_retry",
-    "DataFormatter"
+    "DataFormatter",
+    "MiddlewareManager",
+    "BaseMiddleware"
 ]

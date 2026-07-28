@@ -40,5 +40,6 @@ navix/webhook.py
 navix_rubika.egg-info/PKG-INFO
 navix_rubika.egg-info/SOURCES.txt
 navix_rubika.egg-info/dependency_links.txt
+navix_rubika.egg-info/requires.txt
 navix_rubika.egg-info/top_level.txt
 tests/test_navix.py
