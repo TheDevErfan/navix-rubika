@@ -1,18 +1,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="navix",
-    version="1.0.0.0",
+    name="navix-rubika",
+    version="1.0.0",
     packages=find_packages(),
-    install_requires=[
-        "aiohttp>=3.8.0",
+    description="A library for Rubika",
+    author="Erfan",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
     ],
-    entry_points={
-        "console_scripts": [
-            "navix=navix.cli:main",
-        ],
-    },
-    author="Navix Developers",
-    description="Enterprise-grade async Rubika bot framework",
-    python_requires=">=3.7",
+    python_requires=">=3.6",
 )
