@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: navix
+Version: 1.0.0.0
+Summary: An asynchronous framework for Rubika bots.
+Author: Navix Developers
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: aiohttp>=3.8.0
+Dynamic: author
+Dynamic: license-file
+Dynamic: requires-python
+
+# کتابخانه Navix - نسخه سازمانی جامع قطعی (Ultimate Enterprise Edition Pro)
+کتابخانه **Navix** برترین، کامل‌ترین و پیشرفته‌ترین فریمورک ناهمگام پایتون برای مدیریت بات‌های روبیکا است. با افزوده شدن ۲۰ ابزار جدید کلان‌مقیاس شامل Circuit Breaker، Dependency Injection، EventBus، TTLCache، WorkerPool و Prometheus Exporter، این کتابخانه به بالاترین استانداردهای مهندسی نرم‌افزار دست یافته است.

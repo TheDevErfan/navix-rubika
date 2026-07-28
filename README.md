@@ -1,0 +1,74 @@
+<div align="center">
+
+# 🚀 Navix Framework
+### Enterprise-Grade Asynchronous Framework for Rubika Bots
+
+[![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-1.0.0.0-green.svg)]()
+
+</div>
+
+---
+
+**Navix** قدرتمندترین، پیشرفته‌ترین و جامع‌ترین فریمورک ناهمگام (Async/Await) پایتون برای توسعه ربات‌های مقیاس‌پذیر، سنگین و سازمانی در پیام‌رسان روبیکا است. این کتابخانه با بهره‌گیری از معماری‌های مدرن، ابزارهای کلان‌مقیاس نظیر اتصال Redis، سرور وب‌هوک، سیستم تله‌متری و تست واحد، استانداردهای جهانی توسعه ربات را پیاده‌سازی می‌کند.
+
+---
+
+## ✨ ویژگی‌های برجسته (Key Features)
+
+* **هسته شبکه مقاوم (`AiohttpSession`):** دارای مکانیزم Auto-Retry و تاخیر تصاعدی (Exponential Backoff).
+* **دو حالت ارتباطی:** پشتیبانی از Long Polling و سرور وب‌هوک پرسرعت (`aiohttp.web`).
+* **ماشین حالت سه‌گانه (`FSM`):** پشتیبانی کامل از `MemoryStorage`، `FileStorage` و `RedisStorage` (کلان‌مقیاس).
+* **عملگرهای ترکیبی فیلترها (`&`, `|`, `~`):** ساخت شرط‌های پیچیده پیوسته برای رویدادها.
+* **ابزار تست واحد (`MockClient`):** شبیه‌سازی کلاینت و بررسی هندلرها بدون نیاز به شبکه و توکن.
+* **صفحه‌بندی خودکار (`Paginator`) و چندزبانگی (`i18n`):** ابزارهای پیشرفته رابط کاربری و محلی‌سازی.
+* **سیستم مانیتورینگ و متریک (`TelemetryCollector` & `PrometheusExporter`):** رصد لحظه‌ای درخواست‌ها و خطاها.
+* **ابزار خط فرمان (`Navix CLI`):** اسکلت‌بندی خودکار پروژه‌ها با دستور `navix new-project`.
+* **مجموعه ۱۰۰+ ابزار کمکی:** شامل رمزنگاری، اعتبارسنج‌ها، کش با TTL، کنترل نرخ درخواست (Rate Limiter) و مدیریت تسک‌های پس‌زمینه.
+
+---
+
+## 📦 نصب کتابخانه (Installation)
+
+برای نصب کتابخانه به صورت محلی در حالت توسعه‌دهنده:
+
+```bash
+git clone [https://github.com/your-username/navix.git](https://github.com/your-username/navix.git)
+cd navix
+pip install -e .
+cd ~/navix
+mkdir -p .github/workflows
+
+# 1. ایجاد پایپلاین خودکار GitHub Actions برای تست و اعتبارسنجی
+cat << 'EOF' > .github/workflows/ci.yml
+name: Navix CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies and package
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+    
+    - name: Run Enterprise Unit Tests
+      run: |
+        python -m unittest tests/test_navix.py

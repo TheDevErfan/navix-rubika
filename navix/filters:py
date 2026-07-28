@@ -1,0 +1,28 @@
+import re
+
+class Filters:
+    @staticmethod
+    def text(msg):
+        return bool(msg.text)
+
+    @staticmethod
+    def command(commands):
+        if isinstance(commands, str):
+            commands = [commands]
+        async def func(msg):
+            if not msg.text:
+                return False
+            for cmd in commands:
+                if msg.text.startswith(f"/{cmd}"):
+                    return True
+            return False
+        return func
+
+    @staticmethod
+    def regex(pattern):
+        compiled = re.compile(pattern)
+        async def func(msg):
+            if not msg.text:
+                return False
+            return bool(compiled.search(msg.text))
+        return func

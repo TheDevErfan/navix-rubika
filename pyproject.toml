@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "navix"
+version = "1.0.0.0"
+description = "An asynchronous framework for Rubika bots."
+readme = "docs/introduction.md"
+requires-python = ">=3.8"
+dependencies = [
+    "aiohttp>=3.8.0"
+]
