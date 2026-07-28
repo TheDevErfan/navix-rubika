@@ -1,70 +1,49 @@
-import re
-import inspect
-from typing import Any, Callable, List, Optional, Union
+"""
+Advanced Filters for Navix Router
+"""
+from typing import Union, List
 
-class Filter:
-    def __init__(self, func: Callable):
-        self.func = func
+class Command:
+    """
+    فیلتر تشخیص دستورات ربات (مثل /start یا /help)
+    """
+    def __init__(self, commands: Union[str, List[str]]):
+        if isinstance(commands, str):
+            self.commands = [commands.lstrip("/")]
+        else:
+            self.commands = [cmd.lstrip("/") for cmd in commands]
 
-    async def __call__(self, event: Any) -> bool:
-        if inspect.iscoroutinefunction(self.func):
-            return await self.func(event)
-        return self.func(event)
+    async def __call__(self, message) -> bool:
+        if not message.text:
+            return False
+        text = message.text.strip()
+        if not text.startswith("/"):
+            return False
+        cmd_part = text.split()[0].lstrip("/")
+        return cmd_part in self.commands
 
-    def __and__(self, other: 'Filter') -> 'Filter':
-        async def combined(ev):
-            return await self(ev) and await other(ev)
-        return Filter(combined)
+class Text:
+    """
+    فیلتر تطبیق متن پیام
+    """
+    def __init__(self, text: str, ignore_case: bool = False):
+        self.text = text
+        self.ignore_case = ignore_case
 
-    def __or__(self, other: 'Filter') -> 'Filter':
-        async def combined(ev):
-            return await self(ev) or await other(ev)
-        return Filter(combined)
+    async def __call__(self, message) -> bool:
+        if not message.text:
+            return False
+        msg_text = message.text
+        if self.ignore_case:
+            return msg_text.lower() == self.text.lower()
+        return msg_text == self.text
 
-    def __invert__(self) -> 'Filter':
-        async def combined(ev):
-            return not await self(ev)
-        return Filter(combined)
 
 class Filters:
+    """Filter collection container"""
     @staticmethod
-    def text(message) -> bool:
-        return bool(getattr(message, "text", None))
-
+    def text(msg):
+        return True
     @staticmethod
-    def command(commands: Union[str, List[str]]):
-        if isinstance(commands, str):
-            commands = [commands]
-        def func(message) -> bool:
-            text = getattr(message, "text", "")
-            if not text:
-                return False
-            for cmd in commands:
-                if text.startswith(f"/{cmd}"):
-                    return True
-            return False
-        return Filter(func)
-
-    @staticmethod
-    def regex(pattern: str):
-        compiled = re.compile(pattern)
-        def func(message) -> bool:
-            text = getattr(message, "text", "")
-            return bool(compiled.search(text))
-        return Filter(func)
-
-class StateFilter:
-    def __init__(self, *states: Optional[str]):
-        self.states = [s.name if hasattr(s, "name") else s for s in states]
-
-    async def __call__(self, event) -> bool:
-        client = getattr(event, "client", None)
-        if not client or not hasattr(client, "storage"):
-            return False
-        user_id = getattr(event, "sender_id", None)
-        if not user_id:
-            return False
-        current_state = await client.storage.get_state(user_id)
-        if None in self.states and current_state is None:
-            return True
-        return current_state in self.states
+    def command(cmd):
+        return True

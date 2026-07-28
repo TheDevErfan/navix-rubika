@@ -1,92 +1,84 @@
+"""
+Finite State Machine (FSM) with SQLite Persistent Storage for Navix
+"""
+import sqlite3
 import json
-from typing import Any, Dict, Optional
+from typing import Dict, Any
+from .log import logger
 
 class MemoryStorage:
+    """
+    حافظه موقت موقت در رم (RAM)
+    """
     def __init__(self):
-        self.states: Dict[int, str] = {}
-        self.data: Dict[int, Dict[str, Any]] = {}
+        self._states: Dict[str, str] = {}
+        self._data: Dict[str, Dict[str, Any]] = {}
+        logger.debug("حافظه FSM موقت (MemoryStorage) راه‌اندازی شد.")
 
-    async def get_state(self, user_id: int) -> Optional[str]:
-        return self.states.get(user_id)
+    async def set_state(self, user_id: str, state: str):
+        self._states[user_id] = state
 
-    async def set_state(self, user_id: int, state: Optional[str]) -> None:
-        if state is None:
-            self.states.pop(user_id, None)
-        else:
-            self.states[user_id] = state
+    async def get_state(self, user_id: str) -> str:
+        return self._states.get(user_id)
 
-    async def get_data(self, user_id: int) -> Dict[str, Any]:
-        return self.data.get(user_id, {})
+    async def set_data(self, user_id: str, data: dict):
+        self._data[user_id] = data
 
-    async def set_data(self, user_id: int, data: Dict[str, Any]) -> None:
-        self.data[user_id] = data
+    async def get_data(self, user_id: str) -> dict:
+        return self._data.get(user_id, {})
 
-class FileStorage:
-    def __init__(self, file_path: str = "navix_fsm.json"):
-        self.file_path = file_path
+class SQLiteStorage:
+    """
+    حافظه دائمی و پایدار بر پایه دیتابیس SQLite برای FSM
+    """
+    def __init__(self, db_path: str = "navix_fsm.db"):
+        self.db_path = db_path
+        self._init_db()
+        logger.debug(f"حافظه پایدار SQLite برای FSM در مسیر {db_path} راه‌اندازی شد.")
 
-    def _load(self) -> dict:
-        try:
-            with open(self.file_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return {"states": {}, "data": {}}
+    def _init_db(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS fsm_states (
+                    user_id TEXT PRIMARY KEY,
+                    state TEXT,
+                    data TEXT
+                )
+            """)
+            conn.commit()
 
-    def _save(self, data: dict) -> None:
-        with open(self.file_path, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+    async def set_state(self, user_id: str, state: str):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO fsm_states (user_id, state, data) VALUES (?, ?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET state=excluded.state
+            """, (str(user_id), state, "{}"))
+            conn.commit()
 
-    async def get_state(self, user_id: int) -> Optional[str]:
-        db = self._load()
-        return db["states"].get(str(user_id))
+    async def get_state(self, user_id: str) -> str:
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT state FROM fsm_states WHERE user_id = ?", (str(user_id),))
+            row = cursor.fetchone()
+            return row[0] if row else None
 
-    async def set_state(self, user_id: int, state: Optional[str]) -> None:
-        db = self._load()
-        if state is None:
-            db["states"].pop(str(user_id), None)
-        else:
-            db["states"][str(user_id)] = state
-        self._save(db)
+    async def set_data(self, user_id: str, data: dict):
+        data_json = json.dumps(data)
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO fsm_states (user_id, state, data) VALUES (?, ?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET data=excluded.data
+            """, (str(user_id), None, data_json))
+            conn.commit()
 
-    async def get_data(self, user_id: int) -> Dict[str, Any]:
-        db = self._load()
-        return db["data"].get(str(user_id), {})
-
-    async def set_data(self, user_id: int, data: Dict[str, Any]) -> None:
-        db = self._load()
-        db["data"][str(user_id)] = data
-        self._save(db)
-
-class RedisStorage:
-    """Enterprise Redis storage driver for high-load cluster deployments."""
-    def __init__(self, redis_client: Any):
-        self.redis = redis_client
-
-    async def get_state(self, user_id: int) -> Optional[str]:
-        val = await self.redis.get(f"navix:state:{user_id}")
-        return val.decode("utf-8") if val else None
-
-    async def set_state(self, user_id: int, state: Optional[str]) -> None:
-        key = f"navix:state:{user_id}"
-        if state is None:
-            await self.redis.delete(key)
-        else:
-            await self.redis.set(key, state)
-
-    async def get_data(self, user_id: int) -> Dict[str, Any]:
-        val = await self.redis.get(f"navix:data:{user_id}")
-        return json.loads(val.decode("utf-8")) if val else {}
-
-    async def set_data(self, user_id: int, data: Dict[str, Any]) -> None:
-        key = f"navix:data:{user_id}"
-        await self.redis.set(key, json.dumps(data))
-
-class State:
-    def __init__(self, name: str):
-        self.name = name
-
-class StatesGroup:
-    def __init_subclass__(cls, **kwargs):
-        for key, value in cls.__dict__.items():
-            if isinstance(value, State):
-                value.name = f"{cls.__name__}:{key}"
+    async def get_data(self, user_id: str) -> dict:
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT data FROM fsm_states WHERE user_id = ?", (str(user_id),))
+            row = cursor.fetchone()
+            if row and row[0]:
+                return json.loads(row[0])
+            return {}
