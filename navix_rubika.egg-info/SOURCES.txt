@@ -17,6 +17,7 @@ navix/enums.py
 navix/errors.py
 navix/exceptions.py
 navix/extensions_100.py
+navix/extensions_800.py
 navix/filters.py
 navix/fsm.py
 navix/i18n.py
@@ -34,10 +35,10 @@ navix/tasks.py
 navix/test.py
 navix/throttling.py
 navix/types.py
+navix/utils.py
 navix/webhook.py
 navix_rubika.egg-info/PKG-INFO
 navix_rubika.egg-info/SOURCES.txt
 navix_rubika.egg-info/dependency_links.txt
-navix_rubika.egg-info/requires.txt
 navix_rubika.egg-info/top_level.txt
 tests/test_navix.py

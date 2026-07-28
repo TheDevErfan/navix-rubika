@@ -1,17 +1,15 @@
 Metadata-Version: 2.4
 Name: navix-rubika
-Version: 1.0.0
-Summary: A powerful, modern, and high-performance framework for Rubika bots.
-Author: Developer
+Version: 1.0.4
+Summary: The most powerful Asynchronous framework for Rubika with 800+ enterprise utilities
+Author: TheDevErfan
 License: MIT
-Project-URL: Homepage, https://github.com/username/navix
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: aiohttp>=3.8.0
 Dynamic: license-file
 Dynamic: requires-python
 

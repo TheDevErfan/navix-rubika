@@ -4,22 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "navix-rubika"
-version = "1.0.0"
-description = "A powerful, modern, and high-performance framework for Rubika bots."
+version = "1.0.4"
+description = "The most powerful Asynchronous framework for Rubika with 800+ enterprise utilities"
 readme = "README.md"
-authors = [
-    { name = "Developer" }
-]
+requires-python = ">=3.8"
 license = { text = "MIT" }
+authors = [
+    { name = "TheDevErfan" }
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-requires-python = ">=3.8"
-dependencies = [
-    "aiohttp>=3.8.0"
-]
 
-[project.urls]
-Homepage = "https://github.com/username/navix"
+[dependencies]
+requests = ">=2.0.0"
+aiohttp = ">=3.8.0"
