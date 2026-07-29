@@ -6,7 +6,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8") if (here / "
 
 setup(
     name="navix-rubika",
-    version="1.0.9",
+    version="1.1.0",
     description="A modern, fast, and modular framework for creating Rubika bots",
     long_description=long_description,
     long_description_content_type="text/markdown",

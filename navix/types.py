@@ -1,41 +1,26 @@
 """
-Object-oriented types and models for Navix
+Data Types and Models for Navix Framework
 """
-from typing import Optional, Dict, Any
-from .log import logger
+from typing import Dict, Any, Optional
+
+class User:
+    """مدل اطلاعات کاربر در روبیکا"""
+    def __init__(self, data: Dict[str, Any]):
+        self.id: str = data.get("user_id", "")
+        self.first_name: Optional[str] = data.get("first_name")
+        self.last_name: Optional[str] = data.get("last_name")
+        self.username: Optional[str] = data.get("username")
 
 class Message:
-    """
-    مدل شیءگرا برای مدیریت پیام‌های دریافتی
-    """
-    def __init__(self, data: Dict[str, Any], client=None):
+    """مدل ساختاریافته پیام دریافتی"""
+    def __init__(self, data: Dict[str, Any]):
         self.raw: Dict[str, Any] = data
-        self.client = client
-
-        # استخراج فیلدهای اصلی پیام (با توجه به ساختار روبیکا)
-        self.text: Optional[str] = data.get("text")
-        self.sender_id: Optional[str] = data.get("sender_id") or data.get("author_id")
-        self.chat_id: Optional[str] = data.get("chat_id") or data.get("object_guid")
-        self.message_id: Optional[str] = data.get("message_id")
-
-    async def reply(self, text: str, **kwargs):
-        """
-        ارسال پاسخ مستقیم به همین پیام
-        """
-        if not self.client:
-            logger.error("کلاینت به پیام متصل نیست، امکان ارسال پاسخ وجود ندارد.")
-            return None
-
-        # ارسال پیام از طریق کلاینت
-        return await self.client.request("sendMessage", {
-            "chat_id": self.chat_id,
-            "text": text,
-            "reply_to_message_id": self.message_id,
-            **kwargs
-        })
-
-    def __repr__(self, length: int = 20) -> str:
-        txt = self.text or ""
-        if len(txt) > length:
-            txt = txt[:length] + "..."
-        return f"<Message id={self.message_id} text='{txt}'>"
+        self.message_id: str = data.get("message_id", "")
+        self.chat_id: str = data.get("chat_id", "")
+        self.text: str = data.get("text", "")
+        self.sender_id: str = data.get("sender_id", "")
+        self.author_type: str = data.get("author_type", "User")
+        
+    @property
+    def is_text(self) -> bool:
+        return bool(self.text)

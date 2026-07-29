@@ -1,74 +1,43 @@
-<div align="center">
+# Navix Framework 🚀
 
-# 🚀 Navix Framework
-### Enterprise-Grade Asynchronous Framework for Rubika Bots
+> **A Modern, Fast, and Modular Enterprise-Grade Framework for Building Rubika Bots**
 
-[![Python Version](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0.0-green.svg)]()
-
-</div>
+[![PyPI Version](https://img.shields.io/pypi/v/navix-rubika?style=flat-square&color=blue)](https://pypi.org/project/navix-rubika/)
+[![Python Version](https://img.shields.io/pypi/pyversions/navix-rubika?style=flat-square)](https://pypi.org/project/navix-rubika/)
+[![License](https://img.shields.io/pypi/l/navix-rubika?style=flat-square)](https://github.com/TheDevErfan/navix/blob/main/LICENSE)
 
 ---
 
-**Navix** قدرتمندترین، پیشرفته‌ترین و جامع‌ترین فریمورک ناهمگام (Async/Await) پایتون برای توسعه ربات‌های مقیاس‌پذیر، سنگین و سازمانی در پیام‌رسان روبیکا است. این کتابخانه با بهره‌گیری از معماری‌های مدرن، ابزارهای کلان‌مقیاس نظیر اتصال Redis، سرور وب‌هوک، سیستم تله‌متری و تست واحد، استانداردهای جهانی توسعه ربات را پیاده‌سازی می‌کند.
+## ✨ معرفی فریمورک
+فریمورک **Navix** یک ابزار مدرن، ناهمگام (Async)، ماژولار و سازمانی برای توسعه ربات‌های پیام‌رسان روبیکا است. این فریمورک با الهام از بهترین استانداردهای جهانی طراحی شده تا ساخت ربات‌های پیچیده را سریع، امن و لذت‌بخش کند.
 
 ---
 
-## ✨ ویژگی‌های برجسته (Key Features)
+## 📦 نصب و راه‌اندازی سریع (QuickStart)
 
-* **هسته شبکه مقاوم (`AiohttpSession`):** دارای مکانیزم Auto-Retry و تاخیر تصاعدی (Exponential Backoff).
-* **دو حالت ارتباطی:** پشتیبانی از Long Polling و سرور وب‌هوک پرسرعت (`aiohttp.web`).
-* **ماشین حالت سه‌گانه (`FSM`):** پشتیبانی کامل از `MemoryStorage`، `FileStorage` و `RedisStorage` (کلان‌مقیاس).
-* **عملگرهای ترکیبی فیلترها (`&`, `|`, `~`):** ساخت شرط‌های پیچیده پیوسته برای رویدادها.
-* **ابزار تست واحد (`MockClient`):** شبیه‌سازی کلاینت و بررسی هندلرها بدون نیاز به شبکه و توکن.
-* **صفحه‌بندی خودکار (`Paginator`) و چندزبانگی (`i18n`):** ابزارهای پیشرفته رابط کاربری و محلی‌سازی.
-* **سیستم مانیتورینگ و متریک (`TelemetryCollector` & `PrometheusExporter`):** رصد لحظه‌ای درخواست‌ها و خطاها.
-* **ابزار خط فرمان (`Navix CLI`):** اسکلت‌بندی خودکار پروژه‌ها با دستور `navix new-project`.
-* **مجموعه ۱۰۰+ ابزار کمکی:** شامل رمزنگاری، اعتبارسنج‌ها، کش با TTL، کنترل نرخ درخواست (Rate Limiter) و مدیریت تسک‌های پس‌زمینه.
-
----
-
-## 📦 نصب کتابخانه (Installation)
-
-برای نصب کتابخانه به صورت محلی در حالت توسعه‌دهنده:
+برای نصب پکیج از طریق PyPI دستور زیر را اجرا کنید:
 
 ```bash
-git clone [https://github.com/your-username/navix.git](https://github.com/your-username/navix.git)
-cd navix
-pip install -e .
-cd ~/navix
-mkdir -p .github/workflows
+pip install --upgrade navix-rubika
+cat << 'EOF' > LICENSE
+MIT License
 
-# 1. ایجاد پایپلاین خودکار GitHub Actions برای تست و اعتبارسنجی
-cat << 'EOF' > .github/workflows/ci.yml
-name: Navix CI/CD Pipeline
+Copyright (c) 2026 TheDevErfan (Navix Framework Developers)
 
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, the, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    
-    - name: Install dependencies and package
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .
-    
-    - name: Run Enterprise Unit Tests
-      run: |
-        python -m unittest tests/test_navix.py
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

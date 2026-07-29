@@ -1,15 +1,12 @@
 """
-Keyboard Builder for Navix (Inline and Reply Keyboards)
+Modern Keyboard Builder for Navix Framework
 """
-from typing import List, Dict, Any
 
 class InlineKeyboardBuilder:
-    """
-    سازنده پیشرفته دکمه‌های شیشه‌ای (Inline Keyboards)
-    """
+    """سازنده پیشرفته و زنجیره‌ای کیبوردهای شیشه‌ای برای روبیکا"""
     def __init__(self):
-        self.rows: List[List[Dict[str, Any]]] = []
-        self.current_row: List[Dict[str, Any]] = []
+        self.rows = []
+        self.current_row = []
 
     def add(self, text: str, callback_data: str = None, url: str = None):
         button = {"text": text}
@@ -26,23 +23,24 @@ class InlineKeyboardBuilder:
             self.current_row = []
         return self
 
-    def adjust(self, *sizes: int):
-        # تنظیم تعداد دکمه‌ها در هر سطر
+    def adjust(self, *sizes):
         flat_buttons = [btn for row in self.rows for btn in row] + self.current_row
         self.rows = []
         self.current_row = []
-
+        
         index = 0
         for size in sizes:
             row = flat_buttons[index:index + size]
             if row:
                 self.rows.append(row)
             index += size
+        
         if index < len(flat_buttons):
             self.rows.append(flat_buttons[index:])
         return self
 
-    def as_markup(self) -> Dict[str, Any]:
+    def export(self) -> list:
         if self.current_row:
-            self.row()
-        return {"inline_keyboard": self.rows}
+            self.rows.append(self.current_row)
+            self.current_row = []
+        return self.rows
