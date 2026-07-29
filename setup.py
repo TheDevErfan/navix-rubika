@@ -8,7 +8,7 @@ setup(
     version="1.0.7",
     author="TheDevErfan",
     author_email="your_email@example.com",
-    description="A modern, fast and modular framework for creating Rubika bots",
+    description="A modern, fast, and modular framework for creating Rubika bots",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/TheDevErfan/navix-rubika",
