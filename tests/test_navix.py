@@ -1,32 +1,23 @@
-import asyncio
 import unittest
-from navix import Router, MockClient, Filters, MemoryStorage, TextFormatter, Validators, TTLCache
+from navix import NavixBot, User, Chat, Message, NavixError
 
-class TestNavixEnterprise(unittest.IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
-        self.router = Router()
-        self.client = MockClient()
+class TestNavixFramework(unittest.TestCase):
+    def test_bot_initialization(self):
+        bot = NavixBot(token="test_token")
+        self.assertEqual(bot.token, "test_token")
 
-    async def test_message_routing_and_filters(self):
-        called = []
-
-        @self.router.message(Filters.command("start"))
-        async def start_handler(msg):
-            called.append(msg.text)
-            await msg.reply("Welcome!")
-
-        await self.client.feed_message(self.router, text="/start bot")
-        self.assertEqual(len(called), 1)
-        self.assertEqual(self.client.sent_messages[0]["text"], "Welcome!")
-
-    def test_extensions_100(self):
-        slug = TextFormatter.slugify("Navix Enterprise Framework 2026!")
-        self.assertEqual(slug, "navix-enterprise-framework-2026")
-        self.assertTrue(Validators.is_email("test@navix.io"))
+    def test_models_creation(self):
+        user = User(id="123", username="test_user")
+        chat = Chat(id="456", type="group")
+        message = Message(message_id="789", text="Hello", author=user, chat=chat)
         
-        cache = TTLCache(ttl=10)
-        cache.set("key", "value")
-        self.assertEqual(cache.get("key"), "value")
+        self.assertEqual(message.author.username, "test_user")
+        self.assertEqual(message.chat.type, "group")
+        self.assertEqual(message.text, "Hello")
+
+    def test_exceptions(self):
+        with self.assertRaises(NavixError):
+            raise NavixError("Test error")
 
 if __name__ == "__main__":
     unittest.main()

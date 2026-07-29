@@ -1,23 +1,13 @@
-"""
-Navix Exception Hierarchy for Advanced Error Handling & Debugging
-"""
+"""Navix Rubika Framework - Exceptions."""
 
 class NavixError(Exception):
-    """خطای پایه برای تمام خطاهای کتابخانه Navix"""
-    pass
-
-class NetworkError(NavixError):
-    """خطای مربوط به شبکه، قطع اینترنت یا عدم پاسخگویی سرورهای روبیکا"""
+    """Base exception for all Navix errors."""
     pass
 
 class ValidationError(NavixError):
-    """خطای نامعتبر بودن داده‌ها، پارامترها یا ساختار پیام ورودی"""
+    """Raised when data validation fails."""
     pass
 
-class AuthError(NavixError):
-    """خطای مربوط به توکن نامعتبر، دسترسی غیرمجاز یا احراز هویت"""
-    pass
-
-class FSMError(NavixError):
-    """خطاهای مربوط به ماشین حالت (مدیریت مراحل ربات و استیت‌ها)"""
+class NetworkError(NavixError):
+    """Raised when network or API requests fail."""
     pass
