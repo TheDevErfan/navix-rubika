@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "navix-rubika"
-version = "1.1.0"
+version = "1.1.1"
 description = "A modern, fast, and modular framework for creating Rubika bots"
 readme = "README.md"
 requires-python = ">=3.7"
