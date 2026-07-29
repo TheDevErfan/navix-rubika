@@ -4,18 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "navix-rubika"
-version = "1.0.6"
-description = "A powerful library for Rubika"
+version = "1.0.9"
+description = "A modern, fast, and modular framework for creating Rubika bots"
 readme = "README.md"
-requires-python = ">=3.8"
-license = "MIT"
+requires-python = ">=3.7"
 authors = [
     { name = "TheDevErfan" }
 ]
+license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Topic :: Communications :: Chat",
 ]
-
-[dependencies]
-requests = ">=2.0.0"
