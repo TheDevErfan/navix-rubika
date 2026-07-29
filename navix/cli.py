@@ -6,10 +6,10 @@ def main():
         print("Navix CLI - Enterprise Bot Scaffold Tool")
         print("Usage: navix new-project <project_name>")
         sys.exit(1)
-    
+
     project_name = sys.argv[2]
     os.makedirs(project_name, exist_ok=True)
-    
+
     bot_code = '''import logging
 from navix import Client, Filters, Message
 
@@ -26,7 +26,7 @@ if __name__ == "__main__":
 '''
     with open(os.path.join(project_name, "bot.py"), "w", encoding="utf-8") as f:
         f.write(bot_code)
-        
+
     print(f"پروژه غول‌پیکر '{project_name}' با ساختار استاندارد Navix ایجاد شد!")
     print(f"دستور ورود: cd {project_name} && python bot.py")
 

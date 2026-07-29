@@ -15,12 +15,13 @@ class Throttler:
         logger.debug(f"سیستم ضد اسپم (Throttler) با محدودیت {rate_limit} ثانیه راه‌اندازی شد.")
 
     def is_throttled(self, user_id: str) -> bool:
+        uid = str(user_id)
         current_time = time.time()
-        last_time = self.users_last_time.get(user_id, 0.0)
-        
+        last_time = self.users_last_time.get(uid, 0.0)
+
         if current_time - last_time < self.rate_limit:
-            logger.debug(f"کاربر {user_id} تحت محدودیت اسپم قرار گرفت.")
+            logger.debug(f"کاربر {uid} تحت محدودیت اسپم قرار گرفت.")
             return True
-        
-        self.users_last_time[user_id] = current_time
+
+        self.users_last_time[uid] = current_time
         return False

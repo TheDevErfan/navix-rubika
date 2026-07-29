@@ -31,7 +31,7 @@ class InlineKeyboardBuilder:
         flat_buttons = [btn for row in self.rows for btn in row] + self.current_row
         self.rows = []
         self.current_row = []
-        
+
         index = 0
         for size in sizes:
             row = flat_buttons[index:index + size]

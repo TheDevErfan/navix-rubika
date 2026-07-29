@@ -10,12 +10,12 @@ def setup_logger(name: str = "navix", level: int = logging.INFO) -> logging.Logg
     """
     logger = logging.getLogger(name)
     logger.setLevel(level)
-    
+
     # جلوگیری از اضافه شدن چند هندلر تکراری در صورت فراخوانی مجدد
     if not logger.handlers:
         handler = logging.StreamHandler(sys.stdout)
         handler.setLevel(level)
-        
+
         # فرمت استاندارد و خوانا برای لاگ‌ها (شامل تاریخ، ساعت، سطح و پیام)
         formatter = logging.Formatter(
             "[%(asctime)s] [%(levelname)s] [%(filename)s:%(lineno)d]: %(message)s",
@@ -23,7 +23,7 @@ def setup_logger(name: str = "navix", level: int = logging.INFO) -> logging.Logg
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        
+
     return logger
 
 # ایجاد نمونه پیش‌فرض لاگر برای استفاده در سراسر کتابخانه

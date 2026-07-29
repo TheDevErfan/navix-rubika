@@ -11,7 +11,7 @@ class Message:
     def __init__(self, data: Dict[str, Any], client=None):
         self.raw: Dict[str, Any] = data
         self.client = client
-        
+
         # استخراج فیلدهای اصلی پیام (با توجه به ساختار روبیکا)
         self.text: Optional[str] = data.get("text")
         self.sender_id: Optional[str] = data.get("sender_id") or data.get("author_id")
@@ -25,7 +25,7 @@ class Message:
         if not self.client:
             logger.error("کلاینت به پیام متصل نیست، امکان ارسال پاسخ وجود ندارد.")
             return None
-        
+
         # ارسال پیام از طریق کلاینت
         return await self.client.request("sendMessage", {
             "chat_id": self.chat_id,
@@ -34,5 +34,8 @@ class Message:
             **kwargs
         })
 
-    def __repr__(self) -> str:
-        return f"<Message id={self.message_id} text='{self.text}'>"
+    def __repr__(self, length: int = 20) -> str:
+        txt = self.text or ""
+        if len(txt) > length:
+            txt = txt[:length] + "..."
+        return f"<Message id={self.message_id} text='{txt}'>"

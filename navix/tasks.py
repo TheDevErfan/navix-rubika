@@ -16,6 +16,6 @@ class BackgroundTasks:
         else:
             loop = asyncio.get_running_loop()
             task = loop.run_in_executor(None, lambda: func(*args, **kwargs))
-        
+
         self.tasks.add(task)
         task.add_done_callback(self.tasks.discard)

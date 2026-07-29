@@ -30,10 +30,10 @@ class Paginator:
 
         if page > 1:
             nav_row.append({"text": "⬅️ قبلی", "callback_data": f"{callback_prefix}:{page - 1}"})
-        
+
         nav_row.append({"text": f"📄 {page} / {self.total_pages}", "callback_data": "ignore"})
 
         if page < self.total_pages:
             nav_row.append({"text": "بعدی ➡️", "callback_data": f"{callback_prefix}:{page + 1}"})
-
+            
         return nav_row

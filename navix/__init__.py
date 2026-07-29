@@ -1,16 +1,15 @@
 """Navix Rubika Framework."""
 
 from .client import NavixBot
-from .models import Chat, Message, User
-from .exceptions import NavixError, ValidationError, NetworkError
+from .types import Message
+from .exceptions import NavixError, ValidationError, NetworkError, APIError
 
 __version__ = "1.0.8"
 __all__ = [
     "NavixBot",
     "Message",
-    "User",
-    "Chat",
     "NavixError",
     "ValidationError",
     "NetworkError",
+    "APIError",
 ]

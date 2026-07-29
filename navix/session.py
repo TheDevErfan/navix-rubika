@@ -2,7 +2,7 @@ import asyncio
 import logging
 import aiohttp
 from typing import Any, Dict, Optional
-from .exceptions import RubikaAPIError, NetworkError
+from .exceptions import APIError, NetworkError
 
 logger = logging.getLogger("navix")
 
@@ -39,10 +39,10 @@ class AiohttpSession:
                         data = await response.json()
                     except Exception:
                         text_content = await response.text()
-                        raise RubikaAPIError(f"Invalid JSON response from Rubika: {text_content}")
+                        raise APIError(f"Invalid JSON response from Rubika: {text_content}")
 
                     if response.status >= 500:
-                        raise RubikaAPIError(f"Rubika Server Error (Status {response.status}): {data}")
+                        raise APIError(f"Rubika Server Error (Status {response.status}): {data}", status_code=response.status, data=data)
 
                     return data
 
@@ -51,16 +51,15 @@ class AiohttpSession:
                 if retries > self.max_retries:
                     logger.error(f"Network connection failed after {self.max_retries} retries: {net_err}")
                     raise NetworkError(f"Failed to connect to Rubika API: {net_err}")
-                
+
                 sleep_time = backoff_factor * (2 ** (retries - 1))
                 logger.warning(f"Network glitch occurred ({net_err}). Retrying in {sleep_time}s... (Attempt {retries}/{self.max_retries})")
                 await asyncio.sleep(sleep_time)
-            except RubikaAPIError as api_err:
+            except APIError as api_err:
                 raise api_err
             except Exception as e:
                 logger.error(f"Unexpected error during Rubika request: {e}", exc_info=True)
-                raise NetworkError(f"Unexpected network exception: {e}")
-
+                raise NetworkError(f"Unexpected network exception: {e}")                             
         raise NetworkError("Max retries exceeded for Rubika API request.")
 
     async def close(self) -> None:

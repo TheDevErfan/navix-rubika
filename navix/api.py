@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Any, Optional, Dict
-from .errors import APIError
+from .exceptions import APIError
 
 class API:
     def __init__(self, session: Any, token: Optional[str] = None, **kwargs: Any):
@@ -10,7 +10,13 @@ class API:
 
     async def call(self, method_name: str, data: Optional[Dict[str, Any]] = None) -> Any:
         url = f"{self.base_url}/{method_name}"
-        response = await self.session.request("POST", url, json=data or {})
+        
+        # بررسی نوع session برای ارسال درخواست (پشتیبانی از aiohttp یا سایر نشست‌ها)
+        if hasattr(self.session, "request"):
+            response = await self.session.request("POST", url, json=data or {})
+        else:
+            raise TypeError("Provided session object does not support 'request' method.")
+
         if isinstance(response, dict):
             status = response.get("status")
             if status is not None:

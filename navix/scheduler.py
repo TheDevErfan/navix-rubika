@@ -28,7 +28,7 @@ class BackgroundScheduler:
                             func()
                     except Exception as e:
                         logger.error(f"خطا در اجرای تسک زمان‌بندی شده {func.__name__}: {e}", exc_info=True)
-            
+
             self._tasks.append(wrapper())
             return func
         return decorator

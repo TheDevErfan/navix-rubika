@@ -3,7 +3,9 @@ import time
 
 class TextFormatter:
     @staticmethod
-    def format(text): return text
+    def format(text):
+        return text
+
     @staticmethod
     def slugify(text):
         text = text.lower()
@@ -13,7 +15,9 @@ class TextFormatter:
 
 class Validators:
     @staticmethod
-    def validate(val): return True
+    def validate(val):
+        return True
+
     @staticmethod
     def is_email(email):
         return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email))

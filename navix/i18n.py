@@ -22,13 +22,25 @@ class I18n:
 
     def get(self, key: str, locale: str = None, **kwargs) -> str:
         """
-        دریافت متن ترجمه شده بر اساس کلید و زبان
+        دریافت متن ترجمه شده بر اساس کلید و زبان با قابلیت Fallback به زبان پیش‌فرض
         """
         loc = locale or self.default_locale
-        text = self.translations.get(loc, {}).get(key, key)
+        
+        # جستجو در زبان درخواستی
+        text = self.translations.get(loc, {}).get(key)
+        
+        # اگر پیدا نشد و زبان غیر از پیش‌فرض بود، در زبان پیش‌فرض جستجو کن
+        if text is None and loc != self.default_locale:
+            text = self.translations.get(self.default_locale, {}).get(key)
+            
+        # اگر باز هم پیدا نشد، خود کلید را برگردان
+        if text is None:
+            text = key
+
         if kwargs:
             try:
                 return text.format(**kwargs)
             except Exception as e:
                 logger.error(f"خطا در قالب‌بندی ترجمه کلید {key}: {e}")
+                
         return text

@@ -1,6 +1,7 @@
 """
 Advanced Filters for Navix Router
 """
+import re
 from typing import Union, List
 
 class Command:
@@ -19,7 +20,11 @@ class Command:
         text = message.text.strip()
         if not text.startswith("/"):
             return False
+        # جدا کردن نام دستور از پارامترهای احتمالی
         cmd_part = text.split()[0].lstrip("/")
+        # در نظر گرفتن @username در انتهای دستورات (مانند /start@bot)
+        if "@" in cmd_part:
+            cmd_part = cmd_part.split("@")[0]
         return cmd_part in self.commands
 
 class Text:
@@ -38,12 +43,14 @@ class Text:
             return msg_text.lower() == self.text.lower()
         return msg_text == self.text
 
+class Regexp:
+    """
+    فیلتر تطبیق با الگوی Regular Expression
+    """
+    def __init__(self, pattern: str):
+        self.pattern = re.compile(pattern)
 
-class Filters:
-    """Filter collection container"""
-    @staticmethod
-    def text(msg):
-        return True
-    @staticmethod
-    def command(cmd):
-        return True
+    async def __call__(self, message) -> bool:
+        if not message.text:
+            return False
+        return bool(self.pattern.match(message.text))

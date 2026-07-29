@@ -27,7 +27,6 @@ class MiddlewareManager:
         async def execute_chain(index: int, ev: Any):
             if index < len(self._middlewares):
                 middleware = self._middlewares[index]
-                # عبور دادن رویداد و تابع next به میدلور
                 return await middleware(ev, lambda next_ev=ev: execute_chain(index + 1, next_ev))
             else:
                 if asyncio.iscoroutinefunction(handler):

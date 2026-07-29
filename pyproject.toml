@@ -18,3 +18,9 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Communications :: Chat",
 ]
+dependencies = [
+    "aiohttp>=3.8.0"
+]
+
+[project.scripts]
+navix = "navix.cli:main"

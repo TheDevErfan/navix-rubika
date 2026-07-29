@@ -33,7 +33,7 @@ class Broadcaster:
                 else:
                     fail_count += 1
                 logger.debug(f"ارسال پیام به کاربر {user_id} ناموفق بود: {e}")
-            
+
             if delay > 0:
                 await asyncio.sleep(delay)
 
